@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ad96a61cdc45a9ddbdfc495b5999613c",
+    "content-hash": "14a373798c6f92c8ecfbd9217f9fd7dd",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -1157,16 +1157,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v12.32.5",
+            "version": "v12.33.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "77b2740391cd2a825ba59d6fada45e9b8b9bcc5a"
+                "reference": "124efc5f09d4668a4dc13f94a1018c524a58bcb1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/77b2740391cd2a825ba59d6fada45e9b8b9bcc5a",
-                "reference": "77b2740391cd2a825ba59d6fada45e9b8b9bcc5a",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/124efc5f09d4668a4dc13f94a1018c524a58bcb1",
+                "reference": "124efc5f09d4668a4dc13f94a1018c524a58bcb1",
                 "shasum": ""
             },
             "require": {
@@ -1372,7 +1372,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-09-30T17:39:22+00:00"
+            "time": "2025-10-07T14:30:39+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -6125,6 +6125,95 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "yajra/laravel-datatables-oracle",
+            "version": "v12.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yajra/laravel-datatables.git",
+                "reference": "bd64f4d801cb73c06c3d44b05330508a904b3de1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yajra/laravel-datatables/zipball/bd64f4d801cb73c06c3d44b05330508a904b3de1",
+                "reference": "bd64f4d801cb73c06c3d44b05330508a904b3de1",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^12",
+                "illuminate/filesystem": "^12",
+                "illuminate/http": "^12",
+                "illuminate/support": "^12",
+                "illuminate/view": "^12",
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "algolia/algoliasearch-client-php": "^3.4.1",
+                "larastan/larastan": "^3.1.0",
+                "laravel/pint": "^1.14",
+                "laravel/scout": "^10.8.3",
+                "meilisearch/meilisearch-php": "^1.6.1",
+                "orchestra/testbench": "^10",
+                "rector/rector": "^2.0"
+            },
+            "suggest": {
+                "yajra/laravel-datatables-buttons": "Plugin for server-side exporting of dataTables.",
+                "yajra/laravel-datatables-editor": "Plugin to use DataTables Editor (requires a license).",
+                "yajra/laravel-datatables-export": "Plugin for server-side exporting using livewire and queue worker.",
+                "yajra/laravel-datatables-fractal": "Plugin for server-side response using Fractal.",
+                "yajra/laravel-datatables-html": "Plugin for server-side HTML builder of dataTables."
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "DataTables": "Yajra\\DataTables\\Facades\\DataTables"
+                    },
+                    "providers": [
+                        "Yajra\\DataTables\\DataTablesServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-master": "12.x-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helper.php"
+                ],
+                "psr-4": {
+                    "Yajra\\DataTables\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Arjay Angeles",
+                    "email": "aqangeles@gmail.com"
+                }
+            ],
+            "description": "jQuery DataTables API for Laravel",
+            "keywords": [
+                "datatables",
+                "jquery",
+                "laravel",
+                "yajra"
+            ],
+            "support": {
+                "issues": "https://github.com/yajra/laravel-datatables/issues",
+                "source": "https://github.com/yajra/laravel-datatables/tree/v12.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/yajra",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-02-26T13:54:38+00:00"
         }
     ],
     "packages-dev": [
