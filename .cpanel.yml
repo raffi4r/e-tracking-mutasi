@@ -1,16 +1,5 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/ppvesbhc/public_html
-
-    # Hapus isi lama public_html
-    - /bin/rm -rf $DEPLOYPATH/*
-
-    # Salin semua file Laravel ke public_html
-    - /bin/cp -R * $DEPLOYPATH
-
-    # Jalankan composer install di folder public_html
-    - /usr/local/bin/composer install --no-dev -d $DEPLOYPATH
-
-    # Ganti permission storage dan bootstrap/cache
-    - /bin/chmod -R 775 $DEPLOYPATH/storage
-    - /bin/chmod -R 775 $DEPLOYPATH/bootstrap/cache
+    - /bin/cp -R public/* $DEPLOYPATH
+    - /bin/cp -R * /home/ppvesbhc/laravel/
