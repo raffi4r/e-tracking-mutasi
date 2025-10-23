@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MutasiController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('tracking.tracking');
 });
 
 // ✅ Dashboard (halaman utama setelah login)
