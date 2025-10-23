@@ -8,31 +8,40 @@
 
 @section('body')
     <style>
+        /* ============================
+       BODY & BACKGROUND
+    ============================ */
         html,
         body {
             height: 100%;
             margin: 0;
             overflow: hidden;
-            /* Hilangkan scroll */
+            /* hilangkan scroll */
             background-image: url('{{ asset('images/bg-pattern.jpg') }}');
             background-repeat: repeat;
             background-size: 25%;
             background-attachment: fixed;
             background-position: top left;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* Header biru di atas */
+        /* ============================
+       HEADER SECTION
+    ============================ */
         .header-section {
             background: linear-gradient(90deg, #007bff, #0056b3);
             color: white;
             width: 100%;
-            padding: 15px 40px;
+            padding: 15px 20px;
             display: flex;
+            flex-wrap: wrap;
+            /* anak bisa wrap ke baris baru */
             align-items: center;
             justify-content: flex-start;
-            gap: 20px;
+            gap: 15px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-            height: 100px;
+            height: auto;
+            /* fleksibel sesuai konten */
         }
 
         .header-section img {
@@ -40,17 +49,20 @@
             width: auto;
         }
 
-        .header-text h4 {
-            font-weight: bold;
-            margin-bottom: 4px;
+        .header-text {
+            min-width: 0;
+            /* penting agar teks bisa wrap */
         }
 
+        .header-text h4,
         .header-text h5 {
             margin: 0;
-            font-weight: normal;
+            line-height: 1.2;
         }
 
-        /* Bagian konten utama */
+        /* ============================
+       OVERLAY FORM
+    ============================ */
         .overlay {
             height: calc(100vh - 100px);
             /* sisakan ruang untuk header */
@@ -65,16 +77,83 @@
             border: none;
             max-width: 460px;
             width: 100%;
+            border-radius: 10px;
         }
 
         .card-header {
             background: linear-gradient(90deg, #007bff, #0056b3);
+            color: white;
         }
 
         .card-footer {
             font-size: 0.85rem;
         }
+
+        /* ============================
+       FORM INPUT
+    ============================ */
+        .form-label {
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        /* ============================
+       RESPONSIVE MOBILE
+    ============================ */
+        @media (max-width: 992px) {
+            .header-section img {
+                height: 60px;
+            }
+        }
+
+        @media (max-width: 576px) {
+
+            /* Header stack vertical */
+            .header-section {
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                padding: 10px 15px;
+            }
+
+            .header-text {
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            .header-text h4 {
+                font-size: 1.1rem;
+            }
+
+            .header-text h5 {
+                font-size: 0.9rem;
+            }
+
+            .header-section img {
+                height: 50px;
+                margin: 0 auto;
+            }
+
+            .overlay {
+                height: auto;
+                padding: 20px 15px;
+            }
+
+            .card {
+                max-width: 100%;
+            }
+        }
     </style>
+
 
     {{-- HEADER BIRU --}}
     <div class="header-section">
