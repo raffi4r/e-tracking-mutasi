@@ -53,7 +53,8 @@
 <body>
     <div class="login-card">
         <div class="logo">
-            <img src="{{ asset('images/logo-bkpp-rohul.png') }}" alt="Logo BKPP">
+            <img src="{{ asset('images/logo-rohul.png') }}" alt="Logo Rokan Hulu">
+            <img src="{{ asset('images/logo-bkpp-rohul.png') }}" alt="Logo BKPP Rokan Hulu">
             <h4 class="fw-bold">E-Tracking Mutasi ASN</h4>
         </div>
 
