@@ -297,18 +297,24 @@ return [
     | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Menu-Configuration
     |
     */
-'menu' => [
-    [
-        'text' => 'Mutasi',
-        'url'  => '/mutasi',
-        'icon' => 'fas fa-exchange-alt',
+    'menu' => [
+        [
+            'text' => 'Mutasi',
+            'url'  => '/mutasi',
+            'icon' => 'fas fa-exchange-alt',
+        ],
+        [
+            'text' => 'Profile',
+            'url'  => '/profile',
+            'icon' => 'fas fa-user',
+        ],
+        [
+            'text' => 'Register User',
+            'url'  => 'register',
+            'icon' => 'fas fa-user-plus',
+            'can'  => 'admin', // ← nanti kita atur gate-nya
+        ],
     ],
-    [
-        'text' => 'Profile',
-        'url'  => '/profile',
-        'icon' => 'fas fa-user',
-    ],
-],
 
 
     /*
