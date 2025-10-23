@@ -1,5 +1,4 @@
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/ppvesbhc/public_html
-    - /bin/cp -R public/* $DEPLOYPATH
-    - /bin/cp -R * /home/ppvesbhc/laravel/
+    - export DEPLOYPATH=/home/ppvesbhc/public_html/
+    - /bin/cp -r * $DEPLOYPATH
