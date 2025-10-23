@@ -8,35 +8,48 @@
 
 @section('body')
     <style>
+        /* ============================
+       BODY & BACKGROUND
+    ============================ */
+        html,
         body {
             height: 100%;
             margin: 0;
-            overflow: hidden;
-            /* Hilangkan scroll */
+            overflow-x: hidden;
             background-image: url('{{ asset('images/bg-pattern.jpg') }}');
             background-repeat: repeat;
             background-size: 25%;
             background-attachment: fixed;
             background-position: top left;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* Header biru di atas */
+        /* ============================
+       HEADER SECTION
+    ============================ */
         .header-section {
             background: linear-gradient(90deg, #007bff, #0056b3);
             color: white;
             width: 100%;
             padding: 15px 40px;
             display: flex;
+            flex-wrap: wrap;
+            /* wrap anak saat sempit */
             align-items: center;
             justify-content: flex-start;
             gap: 20px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-            height: 100px;
+            height: auto;
         }
 
         .header-section img {
             height: 70px;
             width: auto;
+        }
+
+        .header-text {
+            min-width: 0;
+            /* agar teks bisa wrap */
         }
 
         .header-text h4 {
@@ -49,6 +62,9 @@
             font-weight: normal;
         }
 
+        /* ============================
+       CARD & CONTENT
+    ============================ */
         .card-custom {
             max-width: 900px;
             margin: 50px auto;
@@ -81,7 +97,9 @@
             text-align: center;
         }
 
-        /* === New Step Design === */
+        /* ============================
+       STEPS PROGRESS BAR
+    ============================ */
         .steps {
             display: flex;
             justify-content: space-between;
@@ -148,6 +166,9 @@
             transition: width 0.4s ease;
         }
 
+        /* ============================
+       NOT FOUND SECTION
+    ============================ */
         .not-found {
             text-align: center;
             padding: 60px 30px;
@@ -157,6 +178,15 @@
             font-size: 60px;
             color: #007bff;
             margin-bottom: 15px;
+        }
+
+        /* ============================
+       RESPONSIVE MOBILE
+    ============================ */
+        @media (max-width: 992px) {
+            .header-section img {
+                height: 60px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -175,7 +205,40 @@
                 display: none;
             }
         }
+
+        @media (max-width: 576px) {
+            .header-section {
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                padding: 10px 15px;
+            }
+
+            .header-text {
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            .header-text h4 {
+                font-size: 1.1rem;
+            }
+
+            .header-text h5 {
+                font-size: 0.9rem;
+            }
+
+            .header-section img {
+                height: 50px;
+                margin: 0 auto;
+            }
+
+            .card-custom {
+                margin: 30px 10px;
+                max-width: 100%;
+            }
+        }
     </style>
+
 
     <div class="header-section">
         <img src="{{ asset('images/logo-rohul.png') }}" alt="Logo Rokan Hulu">
