@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Mutasi;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class MutasiController extends Controller
 {
@@ -18,7 +20,7 @@ class MutasiController extends Controller
 
     public function data()
     {
-        $mutasi = Mutasi::select('id', 'kode_tiket', 'no_hp', 'nama', 'jenis_mutasi', 'status', 'created_at');
+        $mutasi = Mutasi::select('id', 'kode_tiket', 'no_hp', 'nip', 'nama', 'jenis_mutasi', 'status', 'created_at');
 
         return DataTables::of($mutasi)
             ->addIndexColumn()
@@ -33,49 +35,92 @@ class MutasiController extends Controller
             ';
             })
             ->editColumn('no_hp', function ($row) {
-                // Ubah nomor 0852... menjadi 62852...
+                // ubah nomor 0852... jadi 62852...
                 $no_hp = preg_replace('/^0/', '62', $row->no_hp);
                 $no_hp = preg_replace('/^62{2,}/', '62', $no_hp);
 
                 return '
-        <div class="d-flex align-items-center justify-content-center">
-            <span class="mr-2">' . $row->no_hp . '</span>
-            <button class="btn btn-sm btn-outline-primary copy-btn" data-code="' . $row->no_hp . '">
-                <i class="fas fa-copy"></i>
-            </button>
-            <a href="https://wa.me/' . $no_hp . '" target="_blank" class="btn btn-sm btn-success ml-2">
-                <i class="fab fa-whatsapp"></i>
-            </a>
-        </div>
-    ';
+                <div class="d-flex align-items-center justify-content-center">
+                    <span class="mr-2">' . $row->no_hp . '</span>
+                    <button class="btn btn-sm btn-outline-primary copy-btn" data-code="' . $row->no_hp . '">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    <a href="https://wa.me/' . $no_hp . '" target="_blank" class="btn btn-sm btn-success ml-2">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                </div>
+            ';
             })
-            ->editColumn('status', function ($row) {
-                $statusList = [
-                    1 => ['Menunggu', 'warning'],
-                    2 => ['Diproses', 'info'],
-                    3 => ['Selesai', 'success'],
-                    4 => ['Ditolak', 'danger']
-                ];
+            ->addColumn('status', function ($row) {
+                $statusSteps = [];
 
-                $status = $statusList[$row->status] ?? ['Tidak Diketahui', 'secondary'];
-                return '<span class="badge bg-' . $status[1] . '">' . $status[0] . '</span>';
+                switch ($row->jenis_mutasi) {
+                    case 'Mutasi Masuk':
+                        $statusSteps = [
+                            1 => 'Berkas Diterima',
+                            2 => 'Verifikasi & Disposisi Pimpinan',
+                            3 => 'Proses Telaah Staff',
+                            4 => 'Rekomendasi Menerima Terbit',
+                            5 => 'Nota Usul',
+                            6 => 'SK Penempatan Terbit',
+                            7 => 'Selesai',
+                        ];
+                        break;
+                    case 'Mutasi Keluar':
+                        $statusSteps = [
+                            1 => 'Berkas Diterima',
+                            2 => 'Verifikasi & Disposisi Pimpinan',
+                            3 => 'Proses Telaah Staff',
+                            4 => 'Rekomendasi Melepas Terbit',
+                            5 => 'Selesai'
+                        ];
+                        break;
+                    case 'Mutasi Antar OPD':
+                        $statusSteps = [
+                            1 => 'Berkas Diterima',
+                            2 => 'Verifikasi & Disposisi Pimpinan',
+                            3 => 'SK Mutasi Terbit',
+                            4 => 'Selesai'
+                        ];
+                        break;
+                }
+
+                $currentIndex = $row->status; // status disimpan sebagai angka (1,2,3,...)
+                $currentLabel = $statusSteps[$currentIndex] ?? 'Belum Ditetapkan';
+
+                $percentage = 0;
+                if ($currentIndex && count($statusSteps) > 1) {
+                    $percentage = round(($currentIndex / count($statusSteps)) * 100);
+                }
+
+                $badgeClass = 'secondary';
+                if ($percentage < 40) $badgeClass = 'warning';
+                elseif ($percentage < 100) $badgeClass = 'info';
+                elseif ($percentage >= 100) $badgeClass = 'success';
+
+                return "
+                    <div class='text-center'>
+                        <span class='badge bg-{$badgeClass} d-block'>$currentLabel</span>
+                        <small class='badge bg-{$badgeClass}'>{$percentage}%</small>
+                    </div>
+                    ";
             })
             ->addColumn('aksi', function ($row) {
                 return '
-        <div class="btn-group">
-            <button class="btn btn-sm btn-info detail-btn" data-id="' . $row->id . '" title="Detail">
-                <i class="fas fa-eye"></i>
-            </button>
-            <a href="' . route('mutasi.edit', $row->id) . '" class="btn btn-sm btn-warning" title="Edit">
-                <i class="fas fa-edit"></i>
-            </a>
-            <button class="btn btn-sm btn-danger delete-btn" data-id="' . $row->id . '" title="Hapus">
-                <i class="fas fa-trash"></i>
-            </button>
-        </div>
-    ';
+                <div class="btn-group">
+                    <button class="btn btn-sm btn-info detail-btn" data-id="' . $row->id . '" title="Detail">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <a href="' . route('mutasi.edit', $row->id) . '" class="btn btn-sm btn-warning" title="Edit">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <button class="btn btn-sm btn-danger delete-btn" data-id="' . $row->id . '" title="Hapus">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            ';
             })
-            ->rawColumns(['kode_tiket', 'no_hp', 'status', 'aksi'])
+            ->rawColumns(['kode_tiket', 'no_hp', 'nip', 'status', 'aksi'])
             ->make(true);
     }
 
@@ -116,7 +161,7 @@ class MutasiController extends Controller
             'opd_tujuan' => $request->opd_tujuan,
             'jenis_mutasi' => $request->jenis_mutasi,
             'status' => 1,
-            'tanggal_diterima' => now(),
+            'tanggal_1' => now()
         ]);
 
         return redirect()->route('mutasi.index')->with('success', 'Data mutasi berhasil disimpan.');
@@ -158,7 +203,6 @@ class MutasiController extends Controller
             'opd_asal' => 'required',
             'opd_tujuan' => 'required',
             'jenis_mutasi' => 'required',
-            'status' => 'required|integer',
             'keterangan' => 'nullable|string',
         ]);
 
@@ -172,7 +216,6 @@ class MutasiController extends Controller
             'opd_asal',
             'opd_tujuan',
             'jenis_mutasi',
-            'status',
             'keterangan'
         ]));
 
@@ -191,15 +234,66 @@ class MutasiController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
+        // mapping maksimal step per jenis mutasi (sesuaikan jika berubah)
+        $statusMap = [
+            'Mutasi Masuk'    => 7, // 1..7
+            'Mutasi Keluar'   => 5, // 1..5
+            'Mutasi Antar OPD' => 4, // 1..4
+        ];
+
         $request->validate([
-            'status' => 'required|integer|min:1|max:4',
+            'status' => 'required|integer|min:1|max:7',
         ]);
 
-        $mutasi = Mutasi::findOrFail($id);
-        $mutasi->status = $request->status;
-        $mutasi->save();
+        $newStatus = (int) $request->status;
 
-        return response()->json(['success' => true, 'message' => 'Status berhasil diperbarui']);
+        $mutasi = Mutasi::findOrFail($id);
+
+        // tentukan batas maksimal step untuk jenis mutasi ini
+        $jenis = $mutasi->jenis_mutasi;
+        $maxAllowed = $statusMap[$jenis] ?? 7; // fallback 7
+
+        if ($newStatus < 1 || $newStatus > $maxAllowed) {
+            return response()->json([
+                'success' => false,
+                'message' => "Status harus antara 1 dan {$maxAllowed} untuk jenis mutasi '{$jenis}'."
+            ], 422);
+        }
+
+        $oldStatus = (int) ($mutasi->status ?? 1);
+
+        DB::transaction(function () use ($mutasi, $oldStatus, $newStatus, $maxAllowed) {
+            // set status baru
+            $mutasi->status = $newStatus;
+
+            // jika naik (new > old): isi tanggal untuk step yang baru dicapai (jika belum ada)
+            if ($newStatus > $oldStatus) {
+                for ($s = $oldStatus + 1; $s <= $newStatus; $s++) {
+                    $field = 'tanggal_' . $s;
+                    if (Schema::hasColumn('mutasis', $field) && is_null($mutasi->$field)) {
+                        $mutasi->$field = now();
+                    }
+                }
+            }
+
+            // jika turun (new < old): hapus/clear tanggal langkah yang lebih besar dari newStatus
+            if ($newStatus < $oldStatus) {
+                for ($s = $newStatus + 1; $s <= $maxAllowed; $s++) {
+                    $field = 'tanggal_' . $s;
+                    if (Schema::hasColumn('mutasis', $field) && !is_null($mutasi->$field)) {
+                        $mutasi->$field = null;
+                    }
+                }
+            }
+
+            // jika sama, tidak melakukan perubahan tanggal
+            $mutasi->save();
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status dan tanggal step berhasil diperbarui'
+        ]);
     }
 
     public function tracking()

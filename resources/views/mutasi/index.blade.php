@@ -95,50 +95,98 @@
             });
 
             // 📋 Tombol Copy (untuk kode tiket dan no hp)
-            $(document).on('click', '.copy-btn', function() {
-                const text = $(this).data('code');
-                navigator.clipboard.writeText(text);
-                Swal.fire({
-                    toast: true,
-                    icon: 'success',
-                    title: 'Disalin ke clipboard!',
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            });
-
-            // 👁️ Tombol Detail
             $(document).on('click', '.detail-btn', function() {
                 const id = $(this).data('id');
 
                 $.get(`/mutasi/${id}`, function(res) {
-                    const statusOptions = [{
-                            value: 1,
-                            text: 'Menunggu'
-                        },
-                        {
-                            value: 2,
-                            text: 'Diproses'
-                        },
-                        {
-                            value: 3,
-                            text: 'Selesai'
-                        },
-                        {
-                            value: 4,
-                            text: 'Ditolak'
-                        },
-                    ];
 
+                    // Mapping status berdasarkan jenis mutasi
+                    const statusOptionsMap = {
+                        'Mutasi Masuk': [{
+                                value: 1,
+                                text: 'Berkas Diterima'
+                            },
+                            {
+                                value: 2,
+                                text: 'Verifikasi & Disposisi Pimpinan'
+                            },
+                            {
+                                value: 3,
+                                text: 'Proses Telaah Staff'
+                            },
+                            {
+                                value: 4,
+                                text: 'Rekomendasi Menerima Terbit'
+                            },
+                            {
+                                value: 5,
+                                text: 'Nota Usul'
+                            },
+                            {
+                                value: 6,
+                                text: 'SK Penempatan Terbit'
+                            },
+                            {
+                                value: 7,
+                                text: 'Selesai'
+                            }
+
+                        ],
+                        'Mutasi Keluar': [{
+                                value: 1,
+                                text: 'Berkas Diterima'
+                            },
+                            {
+                                value: 2,
+                                text: 'Verifikasi & Disposisi Pimpinan'
+                            },
+                            {
+                                value: 3,
+                                text: 'Proses Telaah Staff'
+                            },
+                            {
+                                value: 4,
+                                text: 'Rekomendasi Melepas Terbit'
+                            },
+                            {
+                                value: 5,
+                                text: 'Selesai'
+                            }
+                        ],
+                        'Mutasi Antar OPD': [{
+                                value: 1,
+                                text: 'Berkas Diterima'
+                            },
+                            {
+                                value: 2,
+                                text: 'Verifikasi & Disposisi Pimpinan'
+                            },
+                            {
+                                value: 3,
+                                text: 'SK Mutasi Terbit'
+                            },
+                            {
+                                value: 4,
+                                text: 'Selesai'
+                            }
+                        ]
+                    };
+
+                    const jenis = res.jenis_mutasi || 'default';
+                    const statusList = statusOptionsMap[jenis] || statusOptionsMap['default'];
+
+                    // buat dropdown status (value = angka, text = label)
                     const statusDropdown = `
             <select id="statusSelect" class="form-control form-control-sm mt-1">
-                ${statusOptions.map(opt => `
-                                                                                <option value="${opt.value}" ${opt.value == res.status ? 'selected' : ''}>${opt.text}</option>
-                                                                            `).join('')}
+                ${statusList.map(opt => `
+                                    <option value="${opt.value}" ${opt.value == res.status ? 'selected' : ''}>
+                                        ${opt.text}
+                                    </option>
+                                `).join('')}
             </select>
         `;
-                    //ubah pangkat dari Ia ke Juru Muda (I/a) dst
+
+                    // ubah pangkat dari singkatan ke format lengkap
                     const pangkatMap = {
                         'Ia': 'Juru Muda (I/a)',
                         'Ib': 'Juru Muda Tingkat I (I/b)',
@@ -167,7 +215,7 @@
                         <p><strong>Nama:</strong><br>${res.nama}</p>
                         <p><strong>NIP:</strong><br>${res.nip}</p>
                         <p><strong>No HP:</strong><br>${res.no_hp}</p>
-                        <p><strong>Pangkat:</strong><br>${pangkatMap[res.pangkat]}</p>
+                        <p><strong>Pangkat:</strong><br>${pangkatMap[res.pangkat] || res.pangkat}</p>
                         <p><strong>Jabatan:</strong><br>${res.jabatan}</p>
                     </div>
                     <div class="col-md-6">
@@ -200,7 +248,7 @@
                             });
                         },
                         preConfirm: () => {
-                            const newStatus = $('#statusSelect').val();
+                            const newStatus = $('#statusSelect').val(); // nilai angka
                             return $.ajax({
                                 url: `/mutasi/${id}/status`,
                                 type: 'PUT',
@@ -230,6 +278,19 @@
                 });
             });
 
+            // 📋 Tombol Copy (untuk kode tiket dan no hp)
+            $(document).on('click', '.copy-btn', function() {
+                const text = $(this).data('code');
+                navigator.clipboard.writeText(text);
+                Swal.fire({
+                    toast: true,
+                    icon: 'success',
+                    title: 'Disalin ke clipboard!',
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            });
 
             // ❌ Tombol Delete
             $(document).on('click', '.delete-btn', function() {

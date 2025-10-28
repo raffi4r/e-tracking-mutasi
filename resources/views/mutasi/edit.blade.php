@@ -149,25 +149,6 @@
                             @enderror
                         </div>
 
-                        {{-- 🔽 Status Mutasi --}}
-                        <div class="form-group mb-3">
-                            <label for="status">Status</label>
-                            <select name="status" id="status"
-                                class="form-control @error('status') is-invalid @enderror">
-                                <option value="1" {{ old('status', $mutasi->status) == 1 ? 'selected' : '' }}>Menunggu
-                                </option>
-                                <option value="2" {{ old('status', $mutasi->status) == 2 ? 'selected' : '' }}>Diproses
-                                </option>
-                                <option value="3" {{ old('status', $mutasi->status) == 3 ? 'selected' : '' }}>Selesai
-                                </option>
-                                <option value="4" {{ old('status', $mutasi->status) == 4 ? 'selected' : '' }}>Ditolak
-                                </option>
-                            </select>
-                            @error('status')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
                         <div class="form-group mb-3">
                             <label for="keterangan">Keterangan (Opsional)</label>
                             <textarea name="keterangan" id="keterangan" rows="5"

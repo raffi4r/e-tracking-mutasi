@@ -23,8 +23,6 @@ return new class extends Migration
             $table->string('opd_tujuan', 100);
             $table->enum('jenis_mutasi', ['Mutasi Masuk', 'Mutasi Keluar', 'Mutasi Antar OPD']);
             $table->integer('status')->default(1);
-            $table->date('tanggal_diterima')->nullable();
-            $table->date('tanggal_selesai')->nullable();
             $table->text('keterangan')->nullable();
             $table->timestamps();
         });
