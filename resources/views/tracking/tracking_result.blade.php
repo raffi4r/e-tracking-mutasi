@@ -10,8 +10,6 @@
     <style>
         html,
         body {
-            height: 100%;
-            margin: 0;
             background: #f7f9fc;
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
@@ -36,66 +34,75 @@
         }
 
         .card-custom {
-            max-width: 950px;
+            max-width: 1000px;
             margin: 50px auto;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
             background-color: #fff;
         }
 
         .card-header {
-            background-color: #007bff !important;
+            background-color: #007bff;
             color: #fff;
-        }
-
-        .info-progress-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 30px 40px;
-            gap: 40px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 12px 12px 0 0;
         }
 
         .info-section {
-            flex: 1;
+            padding: 25px 40px;
         }
 
-        .progress-section {
-            flex: 1;
-            text-align: center;
+        .info-section .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
         }
 
-        /* =============================
-                               PROGRESS STEPS STYLING
-                            ============================= */
+        .info-box {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .info-box h5 {
+            color: #007bff;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
         .steps-wrapper {
+            position: relative;
             display: flex;
             justify-content: space-between;
-            position: relative;
-            margin-top: 50px;
-            padding: 0 20px;
+            padding: 40px 60px 60px;
+            flex-wrap: wrap;
         }
 
         .steps-wrapper::before {
             content: "";
             position: absolute;
-            top: 24px;
-            left: 10%;
-            right: 10%;
+            top: 32px;
+            left: 8%;
+            width: 84%;
             height: 4px;
-            background: #dee2e6;
-            border-radius: 2px;
+            background: #e5e7eb;
+            border-radius: 3px;
             z-index: 0;
         }
 
-        .progress-bar-line {
+        .progress-line {
             position: absolute;
-            top: 24px;
-            left: 10%;
+            top: 32px;
+            left: 8%;
             height: 4px;
             background: #007bff;
-            border-radius: 2px;
+            border-radius: 3px;
             z-index: 1;
             transition: width 0.5s ease;
         }
@@ -103,20 +110,20 @@
         .step {
             position: relative;
             text-align: center;
-            z-index: 2;
             flex: 1;
+            z-index: 2;
         }
 
         .circle {
-            width: 45px;
-            height: 45px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            background: #dee2e6;
+            background: #e5e7eb;
+            color: #6c757d;
+            font-weight: bold;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-weight: bold;
-            color: #6c757d;
             margin: 0 auto;
             transition: all 0.3s ease;
         }
@@ -127,7 +134,7 @@
         }
 
         .step.completed.final .circle {
-            background: #28a745 !important;
+            background: #28a745;
             color: #fff;
             box-shadow: 0 0 12px rgba(40, 167, 69, 0.6);
         }
@@ -139,35 +146,37 @@
         }
 
         .label {
-            margin-top: 10px;
+            margin-top: 8px;
             font-size: 14px;
             font-weight: 500;
             color: #333;
             line-height: 1.3em;
-            max-width: 140px;
-            margin-left: auto;
-            margin-right: auto;
+        }
+
+        .date-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 3px;
         }
 
         @media (max-width: 768px) {
-            .info-progress-container {
-                flex-direction: column;
-                text-align: center;
-            }
-
             .steps-wrapper {
                 flex-direction: column;
                 align-items: center;
-                padding: 0;
+                padding: 20px 0;
             }
 
             .steps-wrapper::before,
-            .progress-bar-line {
+            .progress-line {
                 display: none;
             }
 
             .step {
                 margin-bottom: 20px;
+            }
+
+            .info-section {
+                padding: 20px;
             }
         }
     </style>
@@ -184,10 +193,9 @@
     <div class="container">
         @if ($mutasi)
             @php
-                // Tentukan steps sesuai jenis mutasi
                 switch ($mutasi->jenis_mutasi) {
                     case 'Mutasi Masuk':
-                        $statusSteps = [
+                        $steps = [
                             1 => 'Berkas Diterima',
                             2 => 'Verifikasi & Disposisi Pimpinan',
                             3 => 'Proses Telaah Staff',
@@ -198,7 +206,7 @@
                         ];
                         break;
                     case 'Mutasi Keluar':
-                        $statusSteps = [
+                        $steps = [
                             1 => 'Berkas Diterima',
                             2 => 'Verifikasi & Disposisi Pimpinan',
                             3 => 'Proses Telaah Staff',
@@ -207,7 +215,7 @@
                         ];
                         break;
                     case 'Mutasi Antar OPD':
-                        $statusSteps = [
+                        $steps = [
                             1 => 'Berkas Diterima',
                             2 => 'Verifikasi & Disposisi Pimpinan',
                             3 => 'SK Mutasi Terbit',
@@ -215,75 +223,70 @@
                         ];
                         break;
                     default:
-                        $statusSteps = [1 => 'Berkas Diterima'];
+                        $steps = [1 => 'Berkas Diterima'];
                 }
 
                 $currentStep = (int) ($mutasi->status ?? 1);
-                $stepCount = count($statusSteps);
-                $progressWidth = (($currentStep - 1) / ($stepCount - 1)) * 80 + 10; // biar garis tak mentok kiri-kanan
+                $stepCount = count($steps);
+                $progressWidth = $currentStep >= $stepCount ? 84 : (($currentStep - 1) / max($stepCount - 1, 1)) * 84;
+
             @endphp
 
             <div class="card card-custom">
-                <div class="card-header text-center">
-                    <h4 class="mb-0">Status Mutasi ASN</h4>
-                </div>
-
-                <div class="info-progress-container">
-                    <div class="info-section">
-                        <h5 class="text-primary fw-bold mb-3">Informasi Mutasi</h5>
-                        <p><strong>Kode Tiket:</strong> {{ $mutasi->kode_tiket }}</p>
-                        <p><strong>Nama Pegawai:</strong> {{ $mutasi->nama }}</p>
-                        <p><strong>OPD Asal:</strong> {{ $mutasi->opd_asal }}</p>
-                        <p><strong>OPD Tujuan:</strong> {{ $mutasi->opd_tujuan }}</p>
-                        <p><strong>Jenis Mutasi:</strong> {{ $mutasi->jenis_mutasi }}</p>
-                        <p><strong>Tanggal Pengajuan:</strong> {{ $mutasi->created_at->format('d M Y') }}</p>
-                        <p><strong>Status Saat Ini:</strong>
-                            <span class="badge bg-primary">
-                                {{ $statusSteps[$currentStep] ?? 'Berkas Diterima' }}
-                            </span>
-                        </p>
-                    </div>
-
-                    <div class="progress-section">
-                        <h5 class="text-primary fw-bold mb-3">Progress Status</h5>
-                        <div class="steps-wrapper">
-                            <div class="progress-bar-line" style="width: {{ $progressWidth }}%;"></div>
-                            @foreach ($statusSteps as $i => $label)
-                                @php
-                                    $cls = '';
-                                    if ($i < $currentStep) {
-                                        $cls = 'completed';
-                                    } elseif ($i == $currentStep) {
-                                        $cls = 'active';
-                                    }
-
-                                    // Jika sudah selesai (step terakhir)
-                                    if ($i == $stepCount && $currentStep == $stepCount) {
-                                        $cls = 'completed final';
-                                    }
-
-                                    // Ambil tanggal step ke-i
-                                    $tanggalField = 'tanggal_' . $i;
-                                    $tanggal = $mutasi->$tanggalField
-                                        ? $mutasi->$tanggalField->format('d M Y H:i')
-                                        : null;
-                                @endphp
-
-                                <div class="step {{ $cls }}">
-                                    <div class="circle">{{ $i }}</div>
-                                    <div class="label">
-                                        {{ $label }}
-                                        @if ($tanggal)
-                                            <div style="font-size: 12px; color: #666; margin-top: 4px;">
-                                                {{ $tanggal }}
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                            @endforeach
-
+                <div class="card-header">Status Mutasi ASN</div>
+                <div class="info-section">
+                    <div class="row">
+                        <div class="info-box">
+                            <div class="col">
+                                <h5>Informasi Pegawai</h5>
+                                <p><strong>Nama Pegawai:</strong> {{ $mutasi->nama }}</p>
+                                <p><strong>NIP:</strong> {{ $mutasi->nip }}</p>
+                                <p><strong>Pangkat / Golongan:</strong> {{ $mutasi->pangkat }}</p>
+                                <p><strong>Jabatan:</strong> {{ $mutasi->jabatan }}</p>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            <div class="col">
+                                <h5>Informasi Mutasi</h5>
+                                <p><strong>Kode Tiket:</strong> {{ $mutasi->kode_tiket }}</p>
+                                <p><strong>Jenis Mutasi:</strong> {{ $mutasi->jenis_mutasi }}</p>
+                                <p><strong>OPD Asal:</strong> {{ $mutasi->opd_asal }}</p>
+                                <p><strong>OPD Tujuan:</strong> {{ $mutasi->opd_tujuan }}</p>
+                                <p><strong>Status Saat Ini:</strong> <span class="badge bg-primary">
+                                        {{ is_numeric($mutasi->status) ? $steps[$mutasi->status] : ucfirst($mutasi->status) }}
+                                    </span> </p>
+                            </div>
                         </div>
                     </div>
+                </div>
+
+                <div class="steps-wrapper">
+                    <div class="progress-line" style="width: {{ $progressWidth }}%;"></div>
+                    @foreach ($steps as $i => $label)
+                        @php
+                            $cls = '';
+                            if ($i < $currentStep) {
+                                $cls = 'completed';
+                            } elseif ($i == $currentStep) {
+                                $cls = 'active';
+                            }
+
+                            if ($i == $stepCount && $currentStep == $stepCount) {
+                                $cls = 'completed final';
+                            }
+
+                            $tanggalField = 'tanggal_' . $i;
+                            $tanggal = $mutasi->$tanggalField ? $mutasi->$tanggalField->format('d M Y H:i') : null;
+                        @endphp
+
+                        <div class="step {{ $cls }}">
+                            <div class="circle">{{ $i }}</div>
+                            <div class="label">{{ $label }}</div>
+                            @if ($tanggal)
+                                <div class="date-text">{{ $tanggal }}</div>
+                            @endif
+                        </div>
+                    @endforeach
 
                 </div>
 
@@ -294,16 +297,13 @@
                 </div>
             </div>
         @else
+            {{-- Jika tidak ada data --}}
             <div class="card card-custom">
-                <div class="card-header text-center">
-                    <h4 class="mb-0">Hasil Pencarian</h4>
-                </div>
-                <div class="not-found text-center p-5">
+                <div class="card-header text-center">Hasil Pencarian</div>
+                <div class="text-center p-5">
                     <i class="fas fa-search fa-3x text-primary mb-3"></i>
                     <h5>Data tidak ditemukan</h5>
                     <p class="text-muted">Pastikan kode tiket dan NIP yang Anda masukkan benar.</p>
-                </div>
-                <div class="card-footer text-center bg-light">
                     <a href="{{ url('/tracking') }}" class="btn btn-outline-primary">
                         <i class="fas fa-arrow-left"></i> Kembali
                     </a>
