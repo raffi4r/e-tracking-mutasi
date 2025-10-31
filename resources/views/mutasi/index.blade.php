@@ -1,5 +1,7 @@
 @extends('adminlte::page')
 
+@section('classes_body', 'sidebar-collapse')
+
 @section('title', 'Data Mutasi')
 
 @section('content_header')
@@ -16,6 +18,7 @@
                         <th>No</th>
                         <th>Kode Tiket</th>
                         <th>No HP</th>
+                        <th>NIP</th>
                         <th>Nama</th>
                         <th>Jenis Mutasi</th>
                         <th>Status</th>
@@ -70,6 +73,11 @@
                         className: 'text-center'
                     },
                     {
+                        data: 'nip',
+                        name: 'nip',
+                        className: 'text-center'
+                    },
+                    {
                         data: 'nama',
                         name: 'nama'
                     },
@@ -94,7 +102,7 @@
 
             });
 
-            // 📋 Tombol Copy (untuk kode tiket dan no hp)
+            // 📋 Tombol Copy (untuk kode tiket, NIP dan no hp)
             $(document).on('click', '.detail-btn', function() {
                 const id = $(this).data('id');
 
@@ -179,10 +187,10 @@
                     const statusDropdown = `
             <select id="statusSelect" class="form-control form-control-sm mt-1">
                 ${statusList.map(opt => `
-                                    <option value="${opt.value}" ${opt.value == res.status ? 'selected' : ''}>
-                                        ${opt.text}
-                                    </option>
-                                `).join('')}
+                                                <option value="${opt.value}" ${opt.value == res.status ? 'selected' : ''}>
+                                                    ${opt.text}
+                                                </option>
+                                            `).join('')}
             </select>
         `;
 

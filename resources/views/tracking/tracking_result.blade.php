@@ -1,5 +1,7 @@
 @extends('adminlte::page')
 
+@section('classes_body', 'sidebar-collapse')
+
 @section('layout_topnav', false)
 @section('layout_sidebar', false)
 @section('layout_footer', false)

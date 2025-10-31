@@ -1,5 +1,7 @@
 @extends('adminlte::page')
 
+@section('classes_body', 'sidebar-collapse')
+
 @section('title', 'Profile')
 
 @section('content_header')
