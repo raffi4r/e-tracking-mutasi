@@ -34,23 +34,50 @@ class MutasiController extends Controller
                 </div>
             ';
             })
+            ->editColumn('nip', function ($row) {
+                return '
+                <div class="d-flex align-items-center">
+                    <span class="mr-2">' . $row->nip . '</span>
+                    <button class="btn btn-sm btn-outline-primary copy-btn" data-code="' . $row->nip . '">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            ';
+            })
             ->editColumn('no_hp', function ($row) {
                 // ubah nomor 0852... jadi 62852...
                 $no_hp = preg_replace('/^0/', '62', $row->no_hp);
                 $no_hp = preg_replace('/^62{2,}/', '62', $no_hp);
 
+                // Pesan untuk staff/admin (bahasa formal)
+                $pesan = "Assalamualaikum bapak/ibu %0A%0A" // %0A newline encoded
+                    . "Berkas Mutasi sudah kami terima dengan data sebagai berikut:%0A"
+                    . "Nama: " . $row->nama . "%0A"
+                    . "NIP: " . $row->nip . "%0A"
+                    . "Jenis: " . $row->jenis_mutasi . "%0A%0A"
+                    . "Silahkan pantau perkembangan mutasi melalui sistem e-tracking mutasi pada link:.%0A"
+                    . "https://etracking-mutasi.web.id/ %0A"
+                    . "Dengan memasukkan Kode Tiket berikut:%0A"
+                    . "*" . $row->kode_tiket . "*%0A%0A"
+                    . "Terima kasih.";
+
                 return '
                 <div class="d-flex align-items-center justify-content-center">
-                    <span class="mr-2">' . $row->no_hp . '</span>
-                    <button class="btn btn-sm btn-outline-primary copy-btn" data-code="' . $row->no_hp . '">
+                    <span class="mr-2">' . e($row->no_hp) . '</span>
+                    <button class="btn btn-sm btn-outline-primary copy-btn" data-code="' . e($row->no_hp) . '">
                         <i class="fas fa-copy"></i>
                     </button>
-                    <a href="https://wa.me/' . $no_hp . '" target="_blank" class="btn btn-sm btn-success ml-2">
+                    <a href="https://wa.me/' . $no_hp . '?text=' . $pesan . '"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="btn btn-sm btn-success ml-2"
+                       title="Kirim WhatsApp ke ' . e($row->no_hp) . '">
                         <i class="fab fa-whatsapp"></i>
                     </a>
                 </div>
-            ';
+                ';
             })
+
             ->addColumn('status', function ($row) {
                 $statusSteps = [];
 
