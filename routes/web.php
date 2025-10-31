@@ -8,11 +8,6 @@ Route::get('/', function () {
     return view('tracking.tracking');
 });
 
-// ✅ Dashboard (halaman utama setelah login)
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::patch('/profile/password', [ProfileController::class, 'updatePassword'])
     ->middleware('auth')
     ->name('profile.password.update');
