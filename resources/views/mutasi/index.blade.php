@@ -20,7 +20,7 @@
                         <th>No HP</th>
                         <th>NIP</th>
                         <th>Nama</th>
-                        <th>Jenis Mutasi</th>
+                        <th>Jenis</th>
                         <th>Status</th>
                         <th>Aksi</th>
                     </tr>
@@ -187,10 +187,10 @@
                     const statusDropdown = `
             <select id="statusSelect" class="form-control form-control-sm mt-1">
                 ${statusList.map(opt => `
-                                                <option value="${opt.value}" ${opt.value == res.status ? 'selected' : ''}>
-                                                    ${opt.text}
-                                                </option>
-                                            `).join('')}
+                                                    <option value="${opt.value}" ${opt.value == res.status ? 'selected' : ''}>
+                                                        ${opt.text}
+                                                    </option>
+                                                `).join('')}
             </select>
         `;
 
