@@ -278,7 +278,7 @@
                             }
 
                             $tanggalField = 'tanggal_' . $i;
-                            $tanggal = $mutasi->$tanggalField ? $mutasi->$tanggalField->format('d M Y H:i') : null;
+                            $tanggal = $mutasi->$tanggalField ? $mutasi->$tanggalField->format('d M Y') : null;
                         @endphp
 
                         <div class="step {{ $cls }}">
